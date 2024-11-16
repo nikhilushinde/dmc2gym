@@ -7,7 +7,8 @@ import numpy as np
 def _spec_to_box(spec, dtype):
     def extract_min_max(s):
         assert s.dtype == np.float64 or s.dtype == np.float32
-        dim = np.int(np.prod(s.shape))
+        # dim = np.int(np.prod(s.shape))
+        dim = np.int32(np.prod(s.shape)) # NOTE: Nikhil Add
         if type(s) == specs.Array:
             bound = np.inf * np.ones(dim, dtype=np.float32)
             return -bound, bound
@@ -159,7 +160,8 @@ class DMCWrapper(core.Env):
         obs = self._get_obs(time_step)
         self.current_state = _flatten_obs(time_step.observation)
         extra['discount'] = time_step.discount
-        return obs, reward, done, extra
+        # return obs, reward, done, extra
+        return obs, reward, done, None, extra # NOTE: Nikhil Add - truncated is None
 
     def reset(self):
         time_step = self._env.reset()
